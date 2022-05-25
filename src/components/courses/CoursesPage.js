@@ -5,7 +5,6 @@ import * as authorActions from "../../redux/actions/authorActions";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 import CourseList from './CourseList'
-import { Redirect } from "react-router-dom";
 import Spinner from "../common/Spinner";
 import { toast } from "react-toastify";
 
@@ -46,7 +45,7 @@ class CoursesPage extends React.Component {
   render() {
     return (
       <>
-        {this.state.redirectToAddCoursePage && <Redirect to="/course" />}
+        {this.state.redirectToAddCoursePage && this.props.navigate.push("/course")}
         <h2>Courses</h2>
         {this.props.loading ?
           (<Spinner />) : (
@@ -75,6 +74,7 @@ CoursesPage.propTypes = {
   authors: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired
+  // navigate: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {

@@ -7,6 +7,8 @@ import { newCourse } from "../../../tools/mockData";
 import CourseForm from "./CourseForm";
 import Spinner from "../common/Spinner";
 import { toast } from "react-toastify";
+import { Auth } from 'aws-amplify';
+import { useParams } from "react-router-dom";
 
 function ManageCoursePage({ courses, authors, loadAuthors, loadCourses,
   saveCourse, history, ...props }) {
@@ -60,16 +62,45 @@ function ManageCoursePage({ courses, authors, loadAuthors, loadCourses,
   }
 
   function handleSave(event) {
+
     event.preventDefault();
-    if (!formIsValid()) return;
-    setSaving(true);
-    saveCourse(course).then(() => {
-      toast.success("Course saved.");
-      history.push("/courses");
-    }).catch(error => {
-      setSaving(false);
-      setErrors({ onSave: error.message });
+
+
+    Auth.signUp({
+      username: '+918154909230',
+      password: 'Cooper1!',
+      attributes: {
+        email: 'xcjs1@yopmail.com'
+      }
+    }).then(data => {
+
+      console.log(data);
+
+    }).catch((err) => {
+
+      var error = err;
     });
+
+
+    // Auth.signIn('jigneshkmistry@gmail.com', 'Cooper1!').then((user) => {
+
+    //   let loggedinUser = user;
+
+    //   if (!formIsValid()) return;
+    //   setSaving(true);
+    //   saveCourse(course).then(() => {
+    //     toast.success("Course saved.");
+    //     history.push("/courses");
+    //   }).catch(error => {
+    //     setSaving(false);
+    //     setErrors({ onSave: error.message });
+    //   });
+
+    // })
+
+
+
+
   }
 
   return authors.length === 0 || courses.length === 0 ? (
@@ -95,7 +126,9 @@ ManageCoursePage.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const slug = ownProps.match.params.slug;
+
+  const { slug } = useParams();
+  //const slug = ownProps.match.params.slug;
   const course =
     slug && state.courses.length > 0
       ? getCourseBySlug(state.courses, slug)
